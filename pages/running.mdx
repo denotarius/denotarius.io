@@ -1,0 +1,66 @@
+## Running your own Denotarius backend
+
+### Installation
+
+Let's first clone the source code and compile the code.
+
+```fish copy
+# clone the source code
+git clone https://github.com/denotarius/denotarius-api
+
+# enter nix-shell if nix is installed
+command -v nix-shell
+
+# build the code
+yarn build
+```
+
+### Configuration
+
+The configuration should be located in [the `config/` folder](https://github.com/denotarius/denotarius-api/tree/main/config). There are few examples
+in the original repository, but basically it is:
+
+```json filename="config/default.json" copy
+{
+  "server": {
+    "port": 3000,
+    "debug": false,
+    "prometheusMetrics": false
+  },
+  "db": {
+    "connectionString": "postgresql://localhost/postgres",
+    "maxConnections": 2,
+    "connectionTimeoutMs": 3000,
+    "idleTimeoutMs": 10000,
+    "ssl": false
+  },
+  "blockfrost": {
+    "apiKey": "testnetD3t6mMoXwpxtRA3xdVZY93XvP0JPdSTiH",
+    "ipfsKey": "ipfsqwMez5XOuDzzio6ZQxkpSjApKe4RpAwfi"
+  },
+  "amountToPayInLovelaces": 100000000,
+  "mnemonic": "all all all all all all all all all all all all",
+  "metadataLabel": 69
+}
+```
+
+
+### Running
+
+After you have the configuration file ready. You can run it as following.
+
+```fish
+$ yarn start
+[17:27:05 UTC] INFO (603432): Server listening at http://0.0.0.0:3010
+```
+
+## Docker
+
+We are also hosting the source code as Docker images on [Docker Hub](https://hub.docker.com/r/denotarius/denotarius-api).
+
+
+```fish copy
+docker run -i -p 3010 \
+           -t denotarius/denotarius-api:latest \
+           -v $PWD/config:/config 
+``` 

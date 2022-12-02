@@ -1,0 +1,109 @@
+import { Callout, Tab, Tabs } from 'nextra-theme-docs'
+
+## Crafting a new attestation
+
+To create a new attestation, submit a JSON formated request that contains an array of ipfs
+items to the API endpoint `/attestation/submit/`. The format of the order is following:
+
+  * An array called `ipfs` that contains an object `cid` which contains the IPFS CIDv1 of files you want to attest.
+  * `pin_ipfs` boolean which states if you want Denotarius to pin these files.
+
+<Tabs items={['Mainnet', 'Preview testnet']}>
+	<Tab>
+```fish filename="Submit" copy
+curl -XPOST -H "Content-type: application/json" \
+ -d '{
+   "ipfs": [
+      {
+         "cid":"QmP22VQJ3QH8fFtw6MkhidEVSvVSWruJd5r43VndVNrCKn"
+      },
+      {
+         "cid":"QmVZgLKjFVfMzesyUx6R89GfE34Hk3P2sAss3gjcopFRJo"
+      }
+   ],
+   "pin_ipfs": true
+}' https://api.denotarius.io/attestation/submit
+```
+	</Tab>
+	<Tab>
+```fish filename="Submit" copy
+curl -XPOST -H "Content-type: application/json" \
+ -d '{
+   "ipfs": [
+      {
+         "cid":"QmP22VQJ3QH8fFtw6MkhidEVSvVSWruJd5r43VndVNrCKn"
+      },
+      {
+         "cid":"QmVZgLKjFVfMzesyUx6R89GfE34Hk3P2sAss3gjcopFRJo"
+      }
+   ],
+   "pin_ipfs": true
+}' https://api.preview.denotarius.io/attestation/submit
+```
+	</Tab>
+</Tabs>
+
+Denotarius will return an information response that will contain details about your order,
+including its payment credentials and status.
+
+<Tabs items={['Mainnet', 'Preview testnet']}>
+  <Tab>
+```json filename="Response"
+{
+   "order_id": "7c883e0f-dcf2-4139-aafa-a4b33afc9c34",
+   "payment": {
+      "address": "addr_test1qqu2tz623r3lah4lt6mmuqv8uwxr0quapnufu57huts3qhhk6tew7wrnx0s4465nx05ajz890g44z0kx6a3gsnms4c4qc5asdh",
+      "amount": "10000000"
+   },
+   "status": "unpaid",
+   "time_limit_in_seconds": 1800,
+   "tx_hash": null
+}
+```
+	</Tab>
+	<Tab>
+```json filename="Response"
+{
+   "order_id": "7c883e0f-dcf2-4139-aafa-a4b33afc9c34",
+   "payment": {
+      "address": "addr1qqu2tz623r3lah4lt6mmuqv8uwxr0quapnufu57huts3qhhk6tew7wrnx0s4465nx05ajz890g44z0kx6a3gsnms4c4qc5asdh",
+      "amount": "10000000"
+   },
+   "status": "unpaid",
+   "time_limit_in_seconds": 1800,
+   "tx_hash": null
+}
+```
+  </Tab>
+</Tabs>
+
+The response contains the following information:
+
+	* The ID of your order
+	* Payment details, mainly the address that you need to send the payment to and the amount
+  * Status of the order (`unpaid` when pending the payment)
+  * Time limit is seconds until the payment needs to be accepted on-chain
+  * Transaction hash once the order is fullfilled
+
+You can now pay for the order and check on its status in the next step.
+
+## Viewing the attestation order
+
+To view the attestation order, you need to have the `order_id` from the previous response.
+
+<Tabs items={['Mainnet', 'Preview testnet']}>
+  <Tab>
+```fish filename="View order" copy
+ORDER_ID="7c883e0f-dcf2-4139-aafa-a4b33afc9c34" # from the initial response
+curl https://api.denotarius.io/attestation/${ORDER_ID}
+```
+  </Tab>
+  <Tab>
+```fish filename="View order" copy
+ORDER_ID="7c883e0f-dcf2-4139-aafa-a4b33afc9c34" # from the initial response
+curl https://api.preview.denotarius.io/attestation/${ORDER_ID}
+```
+  </Tab>
+</Tabs>
+
+The response of this command is the same as the Response above.
