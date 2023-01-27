@@ -2,7 +2,7 @@ import { Callout, Tab, Tabs } from 'nextra-theme-docs'
 
 ## Crafting a new attestation
 
-To create a new attestation, submit a JSON formated request that contains an array of ipfs
+To create a new attestation, submit a JSON formatted request that contains an array of ipfs
 items to the API endpoint `/attestation/submit/`. The format of the order is following:
 
   * An array called `ipfs` that contains an object `cid` which contains the IPFS CIDv1 of files you want to attest.
@@ -79,13 +79,13 @@ including its payment credentials and status.
 
 The response contains the following information:
 
-	* The ID of your order
-	* Payment details, mainly the address that you need to send the payment to and the amount
-  * Status of the order (`unpaid` when pending the payment)
-  * Time limit is seconds until the payment needs to be accepted on-chain
-  * Transaction hash once the order is fullfilled
+  * The ID of your order
+  * Payment details, mainly the address that you need to send the payment to and the amount
+  * Status of the order (`unpaid` when payment is still pending)
+  * Time limit, which is seconds until the payment needs to be accepted on-chain
+  * Transaction hash once the order is fulfilled
 
-You can now pay for the order and check on its status in the next step.
+You can now pay for the order and check its status in the next step.
 
 ## Viewing the attestation order
 
